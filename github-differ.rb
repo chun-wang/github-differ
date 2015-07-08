@@ -1,5 +1,6 @@
 require "octokit"
 require 'net/http'
+require 'fileutils'
 
 client = Octokit::Client.new \
   :client_id     => "Chunyu",
@@ -21,4 +22,14 @@ results.data.files.each do |file|
 	puts file.filename
 end
 
-puts Net::HTTP.get_response(URI('https://raw.githubusercontent.com/hustcer/hexo-theme-air/c825fb4f8c0b3ffd01c27812ae240bee1930031f/layout/archive.ejs')).body
+
+dirname = File.dirname("directory/a.txt")
+unless File.directory?(dirname)
+  FileUtils.mkdir_p(dirname)
+end
+
+data = Net::HTTP.get_response(URI('https://raw.githubusercontent.com/hustcer/hexo-theme-air/c825fb4f8c0b3ffd01c27812ae240bee1930031f/layout/archive.ejs')).body
+
+txt = File.open("directory/a.txt","w+")
+txt.write(data);
+txt.close();
